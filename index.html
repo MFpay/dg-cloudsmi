@@ -3,174 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout ZN - Oficial</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>MF CLOUD | Official Luxury Ecosystem</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        .input-zn { @apply w-full p-3 border-2 border-gray-100 rounded-xl outline-none focus:border-blue-600 transition-all bg-gray-50 text-sm; }
-        label { @apply block text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-wider; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        :root {
+            --p-purple: #bc13fe; --p-cyan: #01ffff; --bg: #020202; --card: #0a0a0b; 
+            --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* BANNER DE FRETE DINÂMICO */
+        .top-banner { background: #000; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; letter-spacing: 2px; position: sticky; top: 0; z-index: 3000; border-bottom: 1px solid var(--border); }
+        .ship-progress { position: absolute; left: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, var(--p-purple), var(--p-cyan)); width: 0%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px var(--p-purple); }
+
+        header { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; background: rgba(2,2,2,0.9); backdrop-filter: blur(20px); position: sticky; top: 38px; z-index: 2500; border-bottom: 1px solid var(--border); }
+        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1.5px; } .logo span { color: var(--p-purple); }
+
+        .cart-trigger { background: var(--glass); padding: 10px 22px; border-radius: 100px; border: 1px solid var(--border); cursor: pointer; transition: 0.3s; position: relative; display: flex; align-items: center; gap: 10px; }
+        .cart-trigger:hover { border-color: var(--p-cyan); background: rgba(1, 255, 255, 0.05); }
+        #badge { background: var(--p-purple); color: #fff; font-size: 10px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+
+        /* NOTIFICAÇÃO DE VENDA */
+        .sale-notif { position: fixed; bottom: 30px; left: 30px; background: #fff; color: #000; padding: 15px 25px; border-radius: 20px; display: flex; align-items: center; gap: 15px; transform: translateX(-150%); transition: 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .sale-notif.active { transform: translateX(0); }
+        .notif-icon { width: 35px; height: 35px; background: #25d366; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+
+        /* GRID DE PRODUTOS EXECUTIVO */
+        .catalog { padding: 60px 8%; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .p-card { background: var(--card); border: 1px solid var(--border); border-radius: 40px; padding: 35px; transition: 0.5s; position: relative; }
+        .p-card:hover { border-color: var(--p-purple); transform: translateY(-10px); background: #0d0d0f; }
+        .p-card img { width: 100%; height: 280px; object-fit: contain; margin-bottom: 25px; transition: 0.5s; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        
+        .flavor-label { font-size: 10px; font-weight: 800; color: #555; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+        .flavor-select { width: 100%; padding: 15px; background: #161618; border: 1px solid var(--border); color: #fff; border-radius: 15px; font-weight: 600; cursor: pointer; outline: none; transition: 0.3s; }
+        .flavor-select:focus { border-color: var(--p-purple); }
+
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .price-tag { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+        .add-btn { background: #fff; color: #000; width: 55px; height: 55px; border-radius: 20px; border: none; cursor: pointer; font-size: 1.4rem; transition: 0.4s; }
+        .add-btn:hover { background: var(--p-purple); color: #fff; transform: scale(1.1); box-shadow: 0 0 20px var(--p-purple); }
+
+        /* CARRINHO MODAL */
+        .cart-side { position: fixed; right: -100%; top: 0; width: 480px; height: 100vh; background: #050505; z-index: 5000; padding: 50px; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        .cart-side.active { right: 0; }
+        .cart-list { flex: 1; overflow-y: auto; margin: 30px 0; padding-right: 10px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; background: var(--glass); padding: 20px; border-radius: 22px; margin-bottom: 15px; border: 1px solid var(--border); }
+        
+        .qty-controls { display: flex; align-items: center; gap: 15px; background: #000; padding: 6px 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .qty-btn { color: var(--p-purple); cursor: pointer; font-weight: 800; font-size: 1.1rem; }
+
+        .btn-finish { width: 100%; background: var(--p-purple); color: #fff; padding: 22px; border-radius: 22px; border: none; font-weight: 800; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: 0.3s; }
+        .btn-finish:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(188, 19, 254, 0.4); }
+
+        @media (max-width: 768px) { .cart-side { width: 100%; } .logo { font-size: 1.5rem; } }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen py-8 px-4 font-sans text-gray-800">
+<body>
 
-    <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-        <div class="bg-blue-600 p-6 text-white text-center">
-            <h1 class="text-2xl font-black italic">📋 FORMULÁRIO ZN</h1>
-            <p class="text-xs opacity-90 mt-1">Preencha todos os campos corretamente para evitar erros 🚚✨</p>
+    <div class="top-banner">
+        <div class="ship-progress" id="ship-bar"></div>
+        <span id="ship-msg">CARREGANDO SISTEMA MF CLOUD...</span>
+    </div>
+
+    <div id="sale-notif" class="sale-notif">
+        <div class="notif-icon"><i class="fas fa-shopping-bag"></i></div>
+        <div>
+            <p id="notif-user" style="font-size: 13px; font-weight: 800;"></p>
+            <p id="notif-item" style="font-size: 11px; color: #666;"></p>
         </div>
+    </div>
 
-        <div id="formStep" class="p-6">
-            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl flex items-center justify-between">
-                <span class="text-xs font-bold text-blue-700">Link pra calcular valor do frete: 📨</span>
-                <a href="http://menv.io/9AYE51S" target="_blank" class="text-blue-600 underline font-bold text-xs">Acessar Link</a>
-            </div>
-
-            <form id="znFullForm" action="https://formsubmit.co/zndohot@gmail.com" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                <input type="hidden" name="_next" value="https://seusite.com/sucesso"> <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_subject" value="Novo Pedido ZN - Notas Cenográficas">
-
-                <div class="md:col-span-2">
-                    <label>🧍 Nome:</label>
-                    <input type="text" name="Nome" required class="input-zn">
-                </div>
-                <div>
-                    <label>🪪 CPF:</label>
-                    <input type="text" name="CPF" required class="input-zn">
-                </div>
-                <div>
-                    <label>📞 Telefone:</label>
-                    <input type="text" name="Telefone" required class="input-zn">
-                </div>
-                <div>
-                    <label>📮 CEP:</label>
-                    <input type="text" id="cep" name="CEP" required class="input-zn">
-                </div>
-                <div>
-                    <label>🚪 Rua:</label>
-                    <input type="text" name="Rua" required class="input-zn">
-                </div>
-                <div>
-                    <label>🏠 Número:</label>
-                    <input type="text" name="Numero" required class="input-zn">
-                </div>
-                <div>
-                    <label>🏢 Complemento:</label>
-                    <input type="text" name="Complemento" class="input-zn">
-                </div>
-                <div>
-                    <label>🏘️ Bairro:</label>
-                    <input type="text" name="Bairro" required class="input-zn">
-                </div>
-                <div>
-                    <label>🏙️ Cidade:</label>
-                    <input type="text" name="Cidade" required class="input-zn">
-                </div>
-                <div>
-                    <label>🗺️ Estado:</label>
-                    <input type="text" name="Estado" required class="input-zn">
-                </div>
-                <div class="md:col-span-2">
-                    <label>📌 Referência:</label>
-                    <input type="text" name="Referencia" class="input-zn">
-                </div>
-                <div>
-                    <label>💵 Notas:</label>
-                    <input type="text" name="Notas" required class="input-zn">
-                </div>
-                <div>
-                    <label>💸 Quantidade:</label>
-                    <input type="text" name="Quantidade" required class="input-zn">
-                </div>
-
-                <div class="md:col-span-2 p-4 bg-blue-50 border-2 border-blue-100 rounded-xl">
-                    <label class="text-blue-700 font-bold">🚚 Informe o valor do Frete calculado:</label>
-                    <input type="number" id="valor_frete" name="Valor_Frete" step="0.01" required class="input-zn font-bold text-blue-600">
-                </div>
-
-                <div class="md:col-span-2 bg-red-50 p-4 rounded-xl border border-red-100 mt-2">
-                    <h4 class="text-[10px] font-black text-red-600 mb-2 uppercase tracking-widest">⚠️ Atenção! Leia antes de enviar:</h4>
-                    <ul class="text-[9px] text-gray-600 space-y-1 list-disc ml-3 leading-tight">
-                        <li>📦 Código de rastreio: enviado em até 72h úteis após o pagamento ✅</li>
-                        <li>❌ Pacote apreendido: sem reembolso</li>
-                        <li>🏠 Endereço incorreto: não nos responsabilizamos.</li>
-                    </ul>
-                </div>
-
-                <button type="submit" class="md:col-span-2 bg-green-600 hover:bg-green-700 text-white font-black py-5 rounded-2xl text-xl shadow-lg mt-4 transition-transform active:scale-95">
-                    FINALIZAR E GERAR PIX
-                </button>
-            </form>
+    <header>
+        <div class="logo">MF <span>CLOUD</span></div>
+        <div class="cart-trigger" onclick="toggleCart(true)">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="badge">0</span>
         </div>
+    </header>
 
-        <div id="paymentStep" class="hidden p-8 text-center animate-fadeIn">
-            <h2 class="text-3xl font-black text-blue-600 mb-2" id="displayTotal"></h2>
-            <div class="bg-white p-4 rounded-3xl inline-block mb-6 border-4 border-blue-600 shadow-xl">
-                <img id="qrCodeImg" src="" class="w-64 h-64 mx-auto">
+    <main class="catalog" id="grid"></main>
+
+    <div class="cart-side" id="cart-ui">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="font-size: 1.8rem; font-weight: 800;">Sua Ordem</h2>
+            <i class="fas fa-times" onclick="toggleCart(false)" style="cursor: pointer; font-size: 1.5rem; color: #444;"></i>
+        </div>
+        <div id="cart-list" class="cart-list"></div>
+        <div style="border-top: 1px solid var(--border); padding-top: 25px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+                <span style="font-weight: 800; color: #444; text-transform: uppercase; font-size: 12px;">Total do Pedido</span>
+                <span id="total-price" style="font-size: 2.2rem; font-weight: 800; color: var(--p-cyan);">R$ 0,00</span>
             </div>
-            <div class="space-y-4 max-w-sm mx-auto">
-                <button onclick="copyPix()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-md">
-                    COPIAR PIX COPIA E COLA 📋
-                </button>
-                <div class="mt-4 p-4 bg-green-50 rounded-xl border border-green-100">
-                    <p class="text-xs text-green-800 font-black uppercase tracking-tighter">
-                        ✅ APÓS O PAGAMENTO, ENTRAREMOS EM CONTATO PARA ENVIAR O CÓDIGO DE RASTREIO!
-                    </p>
-                </div>
-            </div>
+            <button class="btn-finish" onclick="checkout()">ENVIAR PARA O WHATSAPP</button>
         </div>
     </div>
 
     <script>
-        function crc16(data) {
-            let crc = 0xFFFF;
-            for (let i = 0; i < data.length; i++) {
-                crc ^= data.charCodeAt(i) << 8;
-                for (let j = 0; j < 8; j++) {
-                    if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ 0x1021;
-                    else crc <<= 1;
-                }
-            }
-            return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
-        }
-
-        const form = document.getElementById('znFullForm');
+        // CONFIGURAÇÃO DO NOVO NÚMERO MF
+        const MY_PHONE = "5515997987924"; 
         
-        form.onsubmit = async function(e) {
-            e.preventDefault();
-            
-            // 1. Enviar para o e-mail via fetch (para não sair da página)
-            const formData = new FormData(form);
-            fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+        const products = [
+            { id: 1, name: 'Ignite V150 Smart', price: 149.90, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_1', flavors: ['Watermelon Ice', 'Grape Ice', 'Black Ice', 'Icy Blue Razz'] },
+            { id: 2, name: 'Elf Bar BC10000', price: 125.00, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_0', flavors: ['Strawberry Kiwi', 'Blue Razz Ice', 'Peach Mango'] },
+            { id: 3, name: 'Oxbar Magic Pro', price: 138.00, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_3', flavors: ['Cool Mint', 'Tropical Punch', 'Mixed Berries'] }
+        ];
 
-            // 2. Calcular valores e mostrar o Pix
-            const frete = parseFloat(document.getElementById('valor_frete').value) || 0;
-            const total = (99.99 + frete).toFixed(2);
-            const pixKey = "d06a38fb-ec54-45f0-8b61-74de10a24648";
-            
-            document.getElementById('displayTotal').innerText = `TOTAL: R$ ${total.replace('.', ',')}`;
+        let cart = JSON.parse(localStorage.getItem('mf_vape_cart')) || [];
 
-            let payload = "00020126";
-            let merchantInfo = "0014BR.GOV.BCB.PIX0136" + pixKey;
-            payload += merchantInfo.length.toString().padStart(2, '0') + merchantInfo;
-            payload += "52040000530398654" + total.length.toString().padStart(2, '0') + total;
-            payload += "5802BR5908ZN NOTAS6009SAO PAULO62070503***6304";
-            
-            const fullPayload = payload + crc16(payload);
-            document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(fullPayload)}`;
-            window.pixPayload = fullPayload;
-
-            document.getElementById('formStep').classList.add('hidden');
-            document.getElementById('paymentStep').classList.remove('hidden');
-            window.scrollTo(0, 0);
-        };
-
-        function copyPix() {
-            navigator.clipboard.writeText(window.pixPayload);
-            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 1500 });
+        function init() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = products.map(p => `
+                <div class="p-card">
+                    <img src="${p.img}" alt="${p.name}">
+                    <h3 style="font-size: 1.4rem; font-weight: 800;">${p.name}</h3>
+                    <div style="margin-top: 15px;">
+                        <span class="flavor-label">Escolha o Sabor</span>
+                        <select class="flavor-select" id="flavor-${p.id}">
+                            ${p.flavors.map(f => `<option value="${f}">${f}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-tag">R$ ${p.price.toFixed(2)}</span>
+                        <button class="add-btn" onclick="add(${p.id})">+</button>
+                    </div>
+                </div>
+            `).join('');
+            update();
         }
+
+        function add(id) {
+            const p = products.find(x => x.id === id);
+            const fl = document.getElementById(`flavor-${id}`).value;
+            const match = cart.find(i => i.id === id && i.flavor === fl);
+            
+            if(match) { match.qty++; } 
+            else { cart.push({ ...p, flavor: fl, qty: 1 }); }
+            
+            save();
+            update();
+            if(window.innerWidth > 768) toggleCart(true);
+        }
+
+        function update() {
+            const list = document.getElementById('cart-list');
+            let total = 0;
+            let count = 0;
+
+            list.innerHTML = cart.map((item, i) => {
+                total += (item.price * item.qty);
+                count += item.qty;
+                return `
+                    <div class="cart-item">
+                        <div>
+                            <p style="font-weight: 800; font-size: 14px;">${item.name}</p>
+                            <p style="font-size: 10px; color: var(--p-purple); font-weight: 800;">${item.flavor}</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="qty-controls">
+                                <span class="qty-btn" onclick="qty(${i}, -1)">-</span>
+                                <span style="font-size: 12px; font-weight: 800;">${item.qty}</span>
+                                <span class="qty-btn" onclick="qty(${i}, 1)">+</span>
+                            </div>
+                            <span style="font-weight: 800; min-width: 70px; text-align: right;">R$ ${(item.price * item.qty).toFixed(2)}</span>
+                        </div>
+                    </div>`;
+            }).join('');
+
+            document.getElementById('badge').innerText = count;
+            document.getElementById('total-price').innerText = `R$ ${total.toFixed(2)}`;
+            
+            // Logica Frete
+            const bar = document.getElementById('ship-bar');
+            const msg = document.getElementById('ship-msg');
+            const progress = Math.min((total / 250) * 100, 100);
+            bar.style.width = progress + '%';
+            msg.innerText = total >= 250 ? "FRETE GRÁTIS ATIVADO!" : `FALTAM R$ ${(250 - total).toFixed(2)} PARA FRETE GRÁTIS`;
+        }
+
+        function qty(idx, d) {
+            cart[idx].qty += d;
+            if(cart[idx].qty <= 0) cart.splice(idx, 1);
+            save();
+            update();
+        }
+
+        function save() { localStorage.setItem('mf_vape_cart', JSON.stringify(cart)); }
+        function toggleCart(s) { document.getElementById('cart-ui').classList.toggle('active', s); }
+
+        function checkout() {
+            if(!cart.length) return alert("Selecione os itens!");
+            let msg = "💨 *NOVO PEDIDO - MF CLOUD*%0A";
+            msg += "━━━━━━━━━━━━━━━━━━━━%0A";
+            cart.forEach(i => {
+                msg += `✅ *${i.qty}x* ${i.name}%0A   └ Sabor: _${i.flavor}_%0A`;
+            });
+            const total = document.getElementById('total-price').innerText;
+            msg += "━━━━━━━━━━━━━━━━━━━━%0A";
+            msg += `💰 *VALOR TOTAL: ${total}*`;
+            window.open(`https://wa.me/${MY_PHONE}?text=${msg}`);
+        }
+
+        // NOTIFICAÇÕES DE VENDAS
+        const users = ["Mateus", "Gabriel", "Leticia", "Rodrigo", "Vitoria", "Enzo"];
+        const towns = ["Cascavel", "Sorocaba", "Itapetininga", "Votorantim", "Salto"];
+
+        function trigger() {
+            const u = users[Math.floor(Math.random()*users.length)];
+            const t = towns[Math.floor(Math.random()*towns.length)];
+            const p = products[Math.floor(Math.random()*products.length)].name;
+            document.getElementById('notif-user').innerText = `${u} de ${t}`;
+            document.getElementById('notif-item').innerText = `Comprou 1x ${p} agora`;
+            const el = document.getElementById('sale-notif');
+            el.classList.add('active');
+            setTimeout(() => el.classList.remove('active'), 5000);
+        }
+
+        setInterval(trigger, 18000);
+        init();
     </script>
 </body>
 </html>
