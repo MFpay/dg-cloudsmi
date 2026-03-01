@@ -3,238 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MF CLOUD | LUXURY VAPE SYSTEM</title>
+    <title>DG CLOUD | Elite Moti Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --p-purple: #bc13fe; --p-cyan: #01ffff; --bg: #020202; --card: #0a0a0b; 
-            --border: rgba(255,255,255,0.06); --gold: #ffd700; --danger: #ff4757;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
+        :root { --dg-green: #9dff00; --dark-bg: #000; --card-bg: #0a0a0a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--dark-bg); color: #fff; line-height: 1.4; overflow-x: hidden; }
+        
+        /* HEADER */
+        header { padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: #000; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--dg-green); }
+        .logo { font-size: 1.4rem; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
+        .logo span { color: var(--dg-green); text-shadow: 0 0 10px var(--dg-green); }
+        .cart-btn { background: var(--dg-green); color: #000; padding: 10px 18px; border-radius: 8px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* BARRAS DE STATUS */
-        .top-info { background: #000; padding: 8px; text-align: center; font-size: 10px; font-weight: 800; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 3000; }
-        .ship-progress-container { background: #111; height: 3px; width: 100%; position: sticky; top: 31px; z-index: 3000; }
-        #ship-bar { height: 100%; width: 0%; background: var(--p-purple); transition: 0.8s; box-shadow: 0 0 10px var(--p-purple); }
+        /* HERO & GATILHOS */
+        .hero { padding: 40px 5% 20px; text-align: center; background: radial-gradient(circle at top, #142100 0%, #000 80%); }
+        .stock-badge { border: 1px solid var(--dg-green); color: var(--dg-green); display: inline-block; padding: 5px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
+        
+        .promo-table { background: rgba(157, 255, 0, 0.05); border: 1px dashed var(--dg-green); margin: 0 5% 20px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; text-align: center; }
+        .promo-item { font-size: 0.75rem; font-weight: 600; }
+        .promo-item span { display: block; color: var(--dg-green); font-weight: 800; font-size: 0.9rem; }
 
-        header { padding: 20px 8%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); position: sticky; top: 34px; background: rgba(2,2,2,0.9); backdrop-filter: blur(15px); z-index: 2000; }
-        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1.5px; } .logo span { color: var(--p-purple); }
+        .delivery-timer { text-align: center; margin-bottom: 20px; font-size: 0.75rem; font-weight: 800; color: #ff4757; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* CATALOGO & LOGICA DE ESTOQUE */
-        .catalog { padding: 40px 8%; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-        .p-card { background: var(--card); border: 1px solid var(--border); border-radius: 40px; padding: 35px; position: relative; transition: 0.4s; }
-        .p-card:hover { border-color: var(--p-cyan); transform: translateY(-10px); }
-        .stock-label { position: absolute; top: 30px; right: 40px; font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 100px; background: rgba(255,255,255,0.05); }
+        /* GRID */
+        .products-grid { padding: 0 5% 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .p-card { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 16px; padding: 30px; transition: 0.3s; text-align: center; }
+        .p-card:hover { border-color: var(--dg-green); transform: translateY(-5px); box-shadow: 0 0 20px rgba(157, 255, 0, 0.1); }
+        
+        .p-icon-circle { width: 70px; height: 70px; background: rgba(157,255,0,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 1px solid rgba(157,255,0,0.2); }
+        .p-icon-circle i { font-size: 1.8rem; color: var(--dg-green); }
 
-        .price-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
-        .btn-add { background: #fff; color: #000; width: 55px; height: 55px; border-radius: 18px; border: none; cursor: pointer; transition: 0.3s; font-size: 1.2rem; }
-        .btn-add:disabled { background: #222; color: #555; cursor: not-allowed; }
+        .p-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
+        .p-tag { font-size: 10px; color: var(--dg-green); font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: block; }
+        .flavor-select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; }
+        .price-tag { font-size: 1.8rem; font-weight: 800; color: #fff; display: block; margin-bottom: 15px; }
+        .add-btn { width: 100%; background: var(--dg-green); color: #000; border: none; padding: 16px; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* CARRINHO AVANÇADO */
-        .cart-panel { position: fixed; right: -100%; top: 0; width: 480px; height: 100vh; background: #050505; z-index: 5000; padding: 40px; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        /* INFO SECTION */
+        .info-section { padding: 50px 5%; background: #050505; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .info-card { background: #0a0a0a; border: 1px solid #111; padding: 25px; border-radius: 15px; }
+        .info-card h3 { color: var(--dg-green); font-size: 0.9rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .info-item { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.85rem; color: #ccc; }
+        .info-item i { color: var(--dg-green); margin-top: 3px; }
+
+        /* CARRINHO */
+        .cart-panel { position: fixed; right: -100%; top: 0; width: 100%; max-width: 400px; height: 100vh; background: #000; z-index: 2000; transition: 0.4s; padding: 25px; border-left: 2px solid var(--dg-green); display: flex; flex-direction: column; }
         .cart-panel.active { right: 0; }
-        
-        .coupon-area { display: flex; gap: 10px; margin: 20px 0; }
-        .coupon-input { flex: 1; background: #000; border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: #fff; font-size: 12px; }
-        .coupon-btn { background: var(--glass); border: 1px solid var(--border); color: #fff; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-size: 10px; font-weight: 800; }
+        .cart-items { flex-grow: 1; overflow-y: auto; margin: 15px 0; }
+        .item-cart { background: #0a0a0a; padding: 15px; border-radius: 10px; border: 1px solid #222; margin-bottom: 10px; }
+        .input-order { width: 100%; padding: 14px; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; margin-bottom: 8px; outline: none; }
+        .finish-btn { width: 100%; padding: 20px; background: var(--dg-green); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1rem; }
 
-        .upsell-msg { background: rgba(1, 255, 255, 0.05); border: 1px dashed var(--p-cyan); padding: 10px; border-radius: 10px; font-size: 11px; color: var(--p-cyan); margin-bottom: 15px; text-align: center; display: none;}
-
-        .checkout-btn { width:100%; padding:22px; background:var(--p-purple); border:none; border-radius:20px; color:#fff; font-weight: 800; cursor:pointer; font-size: 1rem; }
+        /* FLOATS */
+        .social-float { position: fixed; bottom: 20px; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; z-index: 999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-decoration: none; transition: 0.3s; }
+        .insta-float { left: 20px; background: linear-gradient(45deg, #f09433 0%, #dc2743 50%, #bc1888 100%); color: white; }
+        .whats-float { right: 20px; background: #25d366; color: white; }
         
-        #sale-popup { position: fixed; bottom: 30px; left: 30px; background: #fff; color: #000; padding: 15px 25px; border-radius: 20px; display: flex; align-items: center; gap: 15px; transform: translateX(-150%); transition: 0.8s; z-index: 9999; }
-        #sale-popup.active { transform: translateX(0); }
+        footer { padding: 40px 5%; text-align: center; color: #444; font-size: 0.8rem; border-top: 1px solid #111; }
     </style>
 </head>
 <body>
 
-    <div class="top-info" id="time-msg">🔥 ENTREGAS HOJE EM FOZ, SMI E STI 🔥</div>
-    <div class="ship-progress-container"><div id="ship-bar"></div></div>
+<a href="https://www.instagram.com/dg_cloudsmi" target="_blank" class="social-float insta-float">
+    <i class="fab fa-instagram"></i>
+</a>
 
-    <header>
-        <div class="logo">MF <span>CLOUD</span></div>
-        <div onclick="toggleCart(true)" style="cursor: pointer; background: var(--glass); padding: 12px 20px; border-radius: 15px; border: 1px solid var(--border);">
-            <i class="fas fa-shopping-bag"></i> 
-            <span id="badge" style="margin-left: 8px; font-weight: 800; color: var(--p-purple);">0</span>
+<a href="https://wa.me/5515997987924" target="_blank" class="social-float whats-float">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<header>
+    <div class="logo">DG <span>CLOUD</span></div>
+    <div class="cart-btn" onclick="toggleCart(true)">
+        <i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="stock-badge">🔋 ESTOQUE LOCAL: FOZ & SMI</div>
+    <h1>CATÁLOGO ELITE</h1>
+    <p style="color: #666; font-size: 0.9rem;">Qualidade DG Cloud. Entregas das 06:00 às 01:00.</p>
+</section>
+
+<div class="promo-table">
+    <div class="promo-item">VAREJO <span>Preço Base</span></div>
+    <div class="promo-item">5+ UNIDADES <span>10% OFF</span></div>
+    <div class="promo-item">20+ UNIDADES <span>30% OFF</span></div>
+</div>
+
+<div class="delivery-timer">
+    <i class="fas fa-motorcycle"></i> Próxima saída de entrega em: <span id="timer">45:00</span>
+</div>
+
+<div class="products-grid" id="grid"></div>
+
+<section class="info-section">
+    <h2 style="text-align:center; margin-bottom:30px; font-weight:800;">PROTOCOLO DG CLOUD ⚠️</h2>
+    <div class="info-grid">
+        <div class="info-card">
+            <h3><i class="fas fa-clock"></i> Horários e Regiões</h3>
+            <div class="info-item"><i class="fas fa-check"></i> Atendimento: 06h às 01h da manhã.</div>
+            <div class="info-item"><i class="fas fa-map-marker-alt"></i> Foz e SMI: Entrega local imediata.</div>
+            <div class="info-item"><i class="fas fa-globe"></i> Brasil: Mínimo 10 un. via transportadora.</div>
         </div>
-    </header>
-
-    <main class="catalog" id="grid"></main>
-
-    <div class="cart-panel" id="cart">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="font-weight: 800;">Checkout</h2>
-            <i class="fas fa-times" onclick="toggleCart(false)" style="cursor: pointer; font-size: 1.5rem;"></i>
+        <div class="info-card">
+            <h3><i class="fas fa-shield-alt"></i> Regras de Garantia</h3>
+            <div class="info-item"><i class="fas fa-exclamation-triangle"></i> Testar na frente do entregador é obrigatório.</div>
+            <div class="info-item"><i class="fas fa-history"></i> 7 dias para defeitos de fabricação eletrônica.</div>
+            <div class="info-item"><i class="fas fa-ban"></i> Não cobrimos gosto de queimado (mau uso).</div>
         </div>
-
-        <div id="cart-content" style="flex:1; overflow-y:auto; margin: 25px 0;"></div>
-
-        <div id="upsell" class="upsell-msg"></div>
-
-        <div class="coupon-area">
-            <input type="text" id="coupon-field" class="coupon-input" placeholder="CUPOM DE DESCONTO">
-            <button class="coupon-btn" onclick="applyCoupon()">APLICAR</button>
-        </div>
-
-        <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
-            <p style="font-size: 10px; color: #555; margin-bottom: 10px;">CIDADE:</p>
-            <select id="city-select" onchange="update()" style="width:100%; background:#000; border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px;">
-                <option value="foz">Foz do Iguaçu</option>
-                <option value="smi">São Miguel do Iguaçu</option>
-                <option value="sti">Santa Terezinha do Iguaçu</option>
-            </select>
-            <div id="sti-warn" style="color:var(--danger); font-size:10px; margin-top:10px; display:none; font-weight:800;">⚠️ STI: Mínimo 5 unidades para entrega.</div>
-        </div>
-
-        <div style="margin-top: 25px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px; color:#555; margin-bottom:5px;">
-                <span>Subtotal:</span>
-                <span id="sub-total">R$ 0,00</span>
-            </div>
-            <div id="discount-area" style="display:none; justify-content:space-between; font-size:14px; color:var(--gold); margin-bottom:5px;">
-                <span>Descontos Aplicados:</span>
-                <span id="discount-val">- R$ 0,00</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
-                <span style="font-weight: 800;">TOTAL FINAL:</span>
-                <span id="final-total" style="font-size: 2rem; font-weight: 800; color: var(--p-cyan);">R$ 0,00</span>
-            </div>
-            <button id="finish-btn" onclick="checkout()" class="checkout-btn">FECHAR PEDIDO</button>
+        <div class="info-card">
+            <h3><i class="fas fa-credit-card"></i> Pagamento</h3>
+            <div class="info-item"><i class="fas fa-pix"></i> Pix: Liberação e envio priorizado.</div>
+            <div class="info-item"><i class="fas fa-money-bill"></i> Dinheiro: Aceito na entrega local.</div>
+            <div class="info-item"><i class="fas fa-percentage"></i> Desconto aplicado direto no seu carrinho.</div>
         </div>
     </div>
+</section>
 
-    <div id="sale-popup">
-        <div style="background:#25d366; color:#fff; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fas fa-check"></i></div>
-        <div>
-            <p id="notif-user" style="font-size:12px; font-weight:800;"></p>
-            <p id="notif-item" style="font-size:10px; color:#666;"></p>
-        </div>
+<div class="cart-panel" id="cart">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <h2 style="font-weight: 800; color: var(--dg-green)">MEU CARRINHO</h2>
+        <i class="fas fa-times" onclick="toggleCart(false)" style="cursor:pointer; font-size: 1.5rem;"></i>
     </div>
+    <div id="cart-content" class="cart-items"></div>
+    <div style="background: #050505; padding: 20px; border-radius: 15px; border: 1px solid #111;">
+        <select class="input-order" id="region" onchange="update()">
+            <option value="foz">Foz do Iguaçu (Local)</option>
+            <option value="smi">São Miguel (Local)</option>
+            <option value="br">ENVIO BRASIL (Mín. 10 un.)</option>
+        </select>
+        <input type="text" id="address" class="input-order" placeholder="Endereço de entrega completo">
+        <div style="display:flex; justify-content:space-between; margin: 15px 0; font-weight:800; font-size: 1.6rem;">
+            <span>TOTAL:</span>
+            <span id="total-val" style="color:var(--dg-green)">R$ 0,00</span>
+        </div>
+        <button class="finish-btn" id="finish-btn" onclick="sendOrder()">ENVIAR PEDIDO AGORA</button>
+    </div>
+</div>
 
-    <script>
-        const MY_PHONE = "5515997987924";
-        const products = [
-            { id: 1, name: 'Ignite V150', price: 149.90, stock: 12, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_1', flavors: ['Watermelon', 'Grape', 'Mint'] },
-            { id: 2, name: 'Elf Bar BC10k', price: 125.00, stock: 8, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_0', flavors: ['Strawberry Kiwi', 'Peach Mango'] },
-            { id: 3, name: 'Oxbar Magic', price: 138.00, stock: 15, img: 'http://googleusercontent.com/image_collection/image_retrieval/15459970033005642710_3', flavors: ['Tropical', 'Blue Razz'] }
-        ];
+<footer>
+    <p>© 2024 DG CLOUD - Elite Moti Store</p>
+    <p>Siga @dg_cloudsmi no Instagram</p>
+</footer>
 
-        let cart = [];
-        let couponApplied = false;
+<script>
+    const MY_PHONE = "5515997987924";
+    const products = [
+        { id: 1, name: "Moti Nova 50K", price: 150, icon: "fa-bolt", tag: "50.000 Puffs | Full Screen", flavors: ["Miami Mint", "Frozen Strawberry", "Banana Energy", "Blueberry Ice"] },
+        { id: 2, name: "Moti Triplus 25K", price: 120, icon: "fa-fire-alt", tag: "3 Níveis de Potência", flavors: ["Miami Mint", "Grape Ice", "Peach Mango", "Strawberry Kiwi"] },
+        { id: 3, name: "Moti Duo 9K", price: 90, icon: "fa-wind", tag: "Dual Mesh Technology", flavors: ["Spearmint", "Blueberry Raspberry", "Lush Ice"] },
+        { id: 4, name: "Moti Play Bar", price: 80, icon: "fa-display", tag: "7.500 Puffs c/ Visor", flavors: ["Rainbow Cloudz", "Miami Mint", "Tropical Punch"] },
+        { id: 5, name: "Moti Vision 6K", price: 65, icon: "fa-eye", tag: "Custo-Benefício Elite", flavors: ["Cola Ice", "Pink Lemonade", "Mango Ice"] }
+    ];
 
-        function render() {
-            document.getElementById('grid').innerHTML = products.map(p => `
-                <div class="p-card">
-                    <div class="stock-label" style="color:${p.stock < 10 ? 'var(--danger)' : 'var(--p-cyan)'}">ESTOQUE: ${p.stock} UNID.</div>
-                    <img src="${p.img}">
-                    <h3 style="font-size:1.6rem; font-weight:800;">${p.name}</h3>
-                    <select class="flavor-select" id="flavor-${p.id}" style="width:100%; background:#161618; color:#fff; padding:12px; border-radius:15px; margin:15px 0; border:1px solid var(--border);">
-                        ${p.flavors.map(f => `<option value="${f}">${f}</option>`).join('')}
-                    </select>
-                    <div class="price-footer">
-                        <span style="font-size:1.8rem; font-weight:800">R$ ${p.price.toFixed(2)}</span>
-                        <button class="btn-add" onclick="add(${p.id})">+</button>
-                    </div>
+    let cart = [];
+
+    function render() {
+        document.getElementById('grid').innerHTML = products.map(p => `
+            <div class="p-card">
+                <div class="p-icon-circle"><i class="fas ${p.icon}"></i></div>
+                <span class="p-tag">${p.tag}</span>
+                <div class="p-title">${p.name}</div>
+                <select class="flavor-select" id="flavor-${p.id}">
+                    ${p.flavors.map(f => `<option value="${f}">${f}</option>`).join('')}
+                </select>
+                <span class="price-tag">R$ ${p.price.toFixed(2)}</span>
+                <button class="add-btn" onclick="add(${p.id})">ADICIONAR</button>
+            </div>
+        `).join('');
+    }
+
+    function add(id) {
+        const p = products.find(x => x.id === id);
+        const fl = document.getElementById(`flavor-${id}`).value;
+        const item = cart.find(i => i.id === id && i.flavor === fl);
+        if(item) item.qty++; else cart.push({...p, flavor: fl, qty: 1});
+        update(); toggleCart(true);
+    }
+
+    function update() {
+        let sub = 0; let count = 0;
+        cart.forEach(i => { sub += (i.price * i.qty); count += i.qty; });
+        let disc = count >= 20 ? 0.30 : (count >= 5 ? 0.10 : 0);
+        let final = sub * (1 - disc);
+        
+        const region = document.getElementById('region').value;
+        const block = (region === 'br' && count < 10);
+        document.getElementById('finish-btn').disabled = block;
+        document.getElementById('finish-btn').style.opacity = block ? "0.5" : "1";
+
+        document.getElementById('cart-count').innerText = count;
+        document.getElementById('total-val').innerText = `R$ ${final.toFixed(2)}`;
+        document.getElementById('cart-content').innerHTML = cart.map((i, idx) => `
+            <div class="item-cart">
+                <div style="display:flex; justify-content:space-between">
+                    <b>${i.qty}x ${i.name}</b>
+                    <i class="fas fa-trash" onclick="remove(${idx})" style="color:#ff4757; cursor:pointer"></i>
                 </div>
-            `).join('');
-            
-            // Lógica de horário
-            const hour = new Date().getHours();
-            if(hour > 22 || hour < 8) document.getElementById('time-msg').innerText = "💤 LOJA FECHADA - PEDIDOS SERÃO ENTREGUES AMANHÃ";
-        }
+                <small style="color:var(--dg-green)">${i.flavor}</small>
+            </div>
+        `).join('');
+    }
 
-        function add(id) {
-            const p = products.find(x => x.id === id);
-            const fl = document.getElementById(`flavor-${id}`).value;
-            const match = cart.find(i => i.id === id && i.flavor === fl);
-            
-            if(match) {
-                if(match.qty < p.stock) match.qty++; else alert("Limite de estoque atingido!");
-            } else {
-                cart.push({ ...p, flavor: fl, qty: 1 });
-            }
-            update();
-            toggleCart(true);
-        }
+    function remove(idx) { cart.splice(idx,1); update(); }
+    function toggleCart(s) { document.getElementById('cart').classList.toggle('active', s); }
 
-        function update() {
-            let sub = 0; let count = 0;
-            cart.forEach(i => { sub += (i.price * i.qty); count += i.qty; });
+    function sendOrder() {
+        const addr = document.getElementById('address').value;
+        const region = document.getElementById('region').options[document.getElementById('region').selectedIndex].text;
+        if(!addr) return alert("Por favor, informe seu endereço!");
+        let text = `*🐲 DG CLOUD - NOVO PEDIDO*%0A━━━━━━━━━━━━━━━━━━━━%0A`;
+        cart.forEach(i => text += `▪️ *${i.qty}x* ${i.name} (${i.flavor})%0A`);
+        text += `━━━━━━━━━━━━━━━━━━━━%0A📍 *Local:* ${region}%0A🏠 *End:* ${addr}%0A💰 *Total:* ${document.getElementById('total-val').innerText}%0A━━━━━━━━━━━━━━━━━━━━%0A_Enviado via Catálogo DG Cloud_`;
+        window.open(`https://wa.me/${MY_PHONE}?text=${text}`);
+    }
 
-            // Lógica de Atacado (15%) + Cupom (10%)
-            let wholesaleDiscount = count >= 5 ? sub * 0.15 : 0;
-            let couponDiscount = couponApplied ? (sub - wholesaleDiscount) * 0.10 : 0;
-            let total = sub - wholesaleDiscount - couponDiscount;
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+            if (--timer < 0) { timer = duration; }
+        }, 1000);
+    }
 
-            // Lógica de Upsell
-            const upsell = document.getElementById('upsell');
-            if(count > 0 && count < 5) {
-                upsell.style.display = 'block';
-                upsell.innerText = `Faltam ${5 - count} unidades para você ganhar 15% de DESCONTO DE ATACADO!`;
-            } else { upsell.style.display = 'none'; }
-
-            // Lógica Regional STI
-            const city = document.getElementById('city-select').value;
-            const block = (city === 'sti' && count < 5);
-            document.getElementById('sti-warn').style.display = block ? 'block' : 'none';
-            document.getElementById('finish-btn').disabled = (block || count === 0);
-
-            document.getElementById('badge').innerText = count;
-            document.getElementById('sub-total').innerText = `R$ ${sub.toFixed(2)}`;
-            document.getElementById('final-total').innerText = `R$ ${total.toFixed(2)}`;
-            document.getElementById('discount-area').style.display = (wholesaleDiscount > 0 || couponDiscount > 0) ? 'flex' : 'none';
-            document.getElementById('discount-val').innerText = `- R$ ${(wholesaleDiscount + couponDiscount).toFixed(2)}`;
-            document.getElementById('ship-bar').style.width = Math.min((total/250)*100, 100) + '%';
-            
-            document.getElementById('cart-content').innerHTML = cart.map((i, idx) => `
-                <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.03); padding:15px; border-radius:15px; margin-bottom:10px; border:1px solid var(--border);">
-                    <div><p style="font-size:13px; font-weight:800;">${i.qty}x ${i.name}</p><small style="color:var(--p-purple)">${i.flavor}</small></div>
-                    <button onclick="remove(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function applyCoupon() {
-            const val = document.getElementById('coupon-field').value.toUpperCase();
-            if(val === 'MF10') {
-                couponApplied = true;
-                alert("Cupom MF10 aplicado com sucesso!");
-                update();
-            } else { alert("Cupom inválido!"); }
-        }
-
-        function remove(i) { cart.splice(i,1); update(); }
-        function toggleCart(s) { document.getElementById('cart').classList.toggle('active', s); }
-
-        function checkout() {
-            const city = document.getElementById('city-select').options[document.getElementById('city-select').selectedIndex].text;
-            let msg = "*NOVO PEDIDO - MF CLOUD*%0A";
-            msg += "━━━━━━━━━━━━━━━━━━━━%0A";
-            cart.forEach(i => msg += `✅ ${i.qty}x ${i.name} (${i.flavor})%0A`);
-            msg += "━━━━━━━━━━━━━━━━━━━━%0A";
-            msg += `📍 *ENTREGA:* ${city}%0A`;
-            if(cart.reduce((a, b) => a + b.qty, 0) >= 5) msg += "🔥 *DESCONTO ATACADO:* Aplicado%0A";
-            if(couponApplied) msg += "🎟️ *CUPOM MF10:* Aplicado%0A";
-            msg += `💰 *TOTAL FINAL:* ${document.getElementById('final-total').innerText}`;
-            
-            window.open(`https://wa.me/${MY_PHONE}?text=${msg}`);
-        }
-
-        // Notificações realistas
-        function showNotif() {
-            const n = ["Pedro", "João", "Maria", "Gustavo", "Felipe"][Math.floor(Math.random()*5)];
-            const c = ["Foz", "São Miguel", "Santa Terezinha"][Math.floor(Math.random()*3)];
-            const p = products[Math.floor(Math.random()*3)].name;
-            document.getElementById('notif-user').innerText = `${n} de ${c}`;
-            document.getElementById('notif-item').innerText = `Acabou de comprar 1x ${p}`;
-            const el = document.getElementById('sale-popup');
-            el.classList.add('active');
-            setTimeout(() => el.classList.remove('active'), 5000);
-        }
-        setInterval(showNotif, 25000);
+    window.onload = function () {
+        startTimer(60 * 45, document.querySelector('#timer'));
         render();
-    </script>
+    };
+</script>
 </body>
 </html>
